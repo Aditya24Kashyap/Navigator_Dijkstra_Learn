@@ -9,19 +9,23 @@
 
   <h1>Delhi Metro Navigator</h1>
 
-  <div class="search-box">
-    <select id="fromStation"></select>
-    <span>→</span>
-    <select id="toStation"></select>
-    <button id="searchBtn">Search</button>
+
+  <div class="search-box glass">
+
+  <div class="input-wrapper">
+    <input id="fromStation" placeholder="From station" autocomplete="off">
+    <div class="dropdown" id="fromDropdown"></div>
   </div>
 
-  <!-- <div id="result">
-    <img id="defaultMap" src="map.png" alt="Map">
+  <span>→</span>
+
+  <div class="input-wrapper">
+    <input id="toStation" placeholder="To station" autocomplete="off">
+    <div class="dropdown" id="toDropdown"></div>
   </div>
-  <div class="map-container">
-  <img src="delhi-metro-map.svg" id="metroMap" />
-  </div> -->
+
+  <button id="searchBtn">Search</button>
+</div>
 
   <div id="result"></div>
   <div class="map-container">

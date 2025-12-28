@@ -42,7 +42,65 @@ button {
   border-radius: 12px;
   min-height: 60px;
 }
+.glass {
+  background: rgba(30,30,30,0.6);
+  backdrop-filter: blur(10px);
+  padding: 15px;
+  border-radius: 12px;
+  display: inline-flex;
+  gap: 10px;
+}
 
+input {
+  padding: 10px;
+  font-size: 16px;
+  background: rgba(0,0,0,0.4);
+  color: white;
+  border: 1px solid #555;
+  border-radius: 8px;
+  width: 220px;
+}
+
+input::placeholder {
+  color: #aaa;
+  background: rgba(0,0,0,0.45);
+  backdrop-filter: blur(12px);
+  border: 1px solid rgba(255,255,255,0.15);
+  box-shadow: 0 8px 25px rgba(0,0,0,0.4);
+}
+
+.input-wrapper {
+  position: relative;
+}
+
+.dropdown {
+  position: absolute;
+  top: 110%;
+  left: 0;
+  width: 100%;
+  max-height: 260px;
+  overflow-y: auto;
+
+  background: rgba(20, 20, 20, 0.65);
+  backdrop-filter: blur(14px);
+  border: 1px solid rgba(255,255,255,0.12);
+  border-radius: 12px;
+
+  box-shadow: 0 10px 30px rgba(0,0,0,0.45);
+  z-index: 999;
+  display: none;
+}
+
+.dropdown div {
+  padding: 10px 14px;
+  cursor: pointer;
+  color: #eee;
+  font-size: 15px;
+}
+
+.dropdown div:hover {
+  background: rgba(255,255,255,0.08);
+}
 
 #defaultMap {
   max-width: 100%;
