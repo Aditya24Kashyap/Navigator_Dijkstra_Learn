@@ -61,10 +61,12 @@ function buildMetroGraph() {
 function setupSearch(inputId, dropdownId) {
   const input = document.getElementById(inputId);
   const dropdown = document.getElementById(dropdownId);
+  let currentIndex = -1;
 
   input.addEventListener("input", () => {
     const query = input.value.toLowerCase();
     dropdown.innerHTML = "";
+    currentIndex = -1;
 
     if (!query) {
       dropdown.style.display = "none";
@@ -87,6 +89,33 @@ function setupSearch(inputId, dropdownId) {
 
         dropdown.appendChild(div);
       });
+  });
+
+  input.addEventListener("keydown", (e) => {
+    const items = dropdown.querySelectorAll("div");
+    if (!items.length) return;
+
+    if (e.key === "ArrowDown") {
+      e.preventDefault();
+      currentIndex = (currentIndex + 1) % items.length;
+    }
+
+    if (e.key === "ArrowUp") {
+      e.preventDefault();
+      currentIndex = (currentIndex - 1 + items.length) % items.length;
+    }
+
+    if (e.key === "Enter" && currentIndex >= 0) {
+      e.preventDefault();
+      items[currentIndex].click();
+      return;
+    }
+
+    items.forEach(item => item.classList.remove("active"));
+    if (currentIndex >= 0) {
+      items[currentIndex].classList.add("active");
+      items[currentIndex].scrollIntoView({ block: "nearest" });
+    }
   });
 
   document.addEventListener("click", e => {

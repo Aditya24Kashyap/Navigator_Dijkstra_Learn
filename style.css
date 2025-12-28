@@ -102,6 +102,10 @@ input::placeholder {
   background: rgba(255,255,255,0.08);
 }
 
+.dropdown div.active {
+  background: rgba(255, 255, 255, 0.25);
+}
+
 #defaultMap {
   max-width: 100%;
   height: auto;
