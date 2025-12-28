@@ -1,3 +1,66 @@
+let metroLines = {};
+let metroGraph = {};
+
+// LOAD JSON DATA
+fetch("metroLines.json")
+  .then(response => response.json())
+  .then(data => {
+    metroLines = data;
+    buildMetroGraph();
+    populateDropdowns();
+  })
+  .catch(err => {
+    console.error("Failed to load metro data", err);
+  });
+
+  // GRAPH BUILDER FUNCTION
+function buildMetroGraph() {
+  metroGraph = {};
+
+  for (let line in metroLines) {
+    const stations = metroLines[line];
+
+    for (let i = 0; i < stations.length; i++) {
+      const station = stations[i];
+
+      if (!metroGraph[station]) {
+        metroGraph[station] = [];
+      }
+
+      if (i > 0) {
+        metroGraph[station].push({
+          station: stations[i - 1],
+          line,
+          time: 3
+        });
+      }
+
+      if (i < stations.length - 1) {
+        metroGraph[station].push({
+          station: stations[i + 1],
+          line,
+          time: 3
+        });
+      }
+    }
+  }
+}
+// DROPDOWN POPULATOR (NEW)
+function populateDropdowns() {
+  const fromSelect = document.getElementById("fromStation");
+  const toSelect = document.getElementById("toStation");
+
+  fromSelect.innerHTML = "";
+  toSelect.innerHTML = "";
+
+  Object.keys(metroGraph)
+    .sort()
+    .forEach(station => {
+      fromSelect.innerHTML += `<option value="${station}">${station}</option>`;
+      toSelect.innerHTML += `<option value="${station}">${station}</option>`;
+    });
+}
+
 // LINE COLORS
 const LINE_COLORS = {
   Red: "#E53935",
@@ -12,69 +75,114 @@ const LINE_COLORS = {
 };
 
 // METRO GRAPH DATA (REAL STRUCTURE)
-const metroGraph = {
-  // RED LINE
-  "Rithala": [
-    { station: "Netaji Subhash Place", line: "Red", time: 4 }
-  ],
-  "Netaji Subhash Place": [
-    { station: "Rithala", line: "Red", time: 4 },
-    { station: "Kashmere Gate", line: "Red", time: 10 }
-  ],
-  "Kashmere Gate": [
-    { station: "Netaji Subhash Place", line: "Red", time: 10 },
-    { station: "Chandni Chowk", line: "Yellow", time: 2 },
-    { station: "Mandi House", line: "Violet", time: 6 }
-  ],
+// const metroGraph = {
+//   // RED LINE
+//   "Rithala": [
+//     { station: "Netaji Subhash Place", line: "Red", time: 4 }
+//   ],
+//   "Netaji Subhash Place": [
+//     { station: "Rithala", line: "Red", time: 4 },
+//     { station: "Kashmere Gate", line: "Red", time: 10 }
+//   ],
+//   "Kashmere Gate": [
+//     { station: "Netaji Subhash Place", line: "Red", time: 10 },
+//     { station: "Chandni Chowk", line: "Yellow", time: 2 },
+//     { station: "Mandi House", line: "Violet", time: 6 }
+//   ],
 
-  // YELLOW LINE
-  "Samaypur Badli": [
-    { station: "Chandni Chowk", line: "Yellow", time: 15 }
-  ],
-  "Chandni Chowk": [
-    { station: "Samaypur Badli", line: "Yellow", time: 15 },
-    { station: "Kashmere Gate", line: "Yellow", time: 2 },
-    { station: "Rajiv Chowk", line: "Yellow", time: 3 }
-  ],
-  "Rajiv Chowk": [
-    { station: "Chandni Chowk", line: "Yellow", time: 3 },
-    { station: "Janakpuri West", line: "Blue", time: 14 }
-  ],
+//   // YELLOW LINE
+//   "Samaypur Badli": [
+//     { station: "Chandni Chowk", line: "Yellow", time: 15 }
+//   ],
+//   "Chandni Chowk": [
+//     { station: "Samaypur Badli", line: "Yellow", time: 15 },
+//     { station: "Kashmere Gate", line: "Yellow", time: 2 },
+//     { station: "Rajiv Chowk", line: "Yellow", time: 3 }
+//   ],
+//   "Rajiv Chowk": [
+//     { station: "Chandni Chowk", line: "Yellow", time: 3 },
+//     { station: "Janakpuri West", line: "Blue", time: 14 }
+//   ],
 
-  // BLUE LINE
-  "Janakpuri West": [
-    { station: "Rajiv Chowk", line: "Blue", time: 14 }
-  ],
+//   // BLUE LINE
+//   "Janakpuri West": [
+//     { station: "Rajiv Chowk", line: "Blue", time: 14 }
+//   ],
 
-  // VIOLET LINE
-  "Mandi House": [
-    { station: "Kashmere Gate", line: "Violet", time: 6 }
-  ]
-};
+//   // VIOLET LINE
+//   "Mandi House": [
+//     { station: "Kashmere Gate", line: "Violet", time: 6 }
+//   ]
+// };
 
 // POPULATE DROPDOWNS
 const fromSelect = document.getElementById("fromStation");
 const toSelect = document.getElementById("toStation");
 
-Object.keys(metroGraph).forEach(station => {
-  fromSelect.innerHTML += `<option value="${station}">${station}</option>`;
-  toSelect.innerHTML += `<option value="${station}">${station}</option>`;
-});
+// Object.keys(metroGraph).forEach(station => {
+//   fromSelect.innerHTML += `<option value="${station}">${station}</option>`;
+//   toSelect.innerHTML += `<option value="${station}">${station}</option>`;
+// });
 
 // DIJKSTRA ALGORITHM (CORE ENGINE)
+// function dijkstra(start, end) {
+//   const distances = {};
+//   const previous = {};
+//   const visited = new Set();
+//   const interchangePenalty = 2;
+
+//   for (let station in metroGraph) {
+//     distances[station] = Infinity;
+//   }
+//   distances[start] = 0;
+
+//   while (true) {
+//     let closest = null;
+
+//     for (let station in distances) {
+//       if (!visited.has(station) &&
+//           (closest === null || distances[station] < distances[closest])) {
+//         closest = station;
+//       }
+//     }
+
+//     if (closest === null) break;
+//     if (closest === end) break;
+
+//     visited.add(closest);
+
+//     for (let neighbor of metroGraph[closest]) {
+//       const newDist = distances[closest] + neighbor.time;
+
+//       if (newDist < distances[neighbor.station]) {
+//         distances[neighbor.station] = newDist;
+//         previous[neighbor.station] = {
+//           station: closest,
+//           line: neighbor.line
+//         };
+//       }
+//     }
+//   }
+
+// DIJKSTRA ALGORITHM (CORE ENGINE WITH INTERCHANGE PENALTY)
 function dijkstra(start, end) {
   const distances = {};
   const previous = {};
   const visited = new Set();
 
+  const interchangePenalty = 2; // extra time when changing lines
+
+  // STEP 1: initialize distances
   for (let station in metroGraph) {
     distances[station] = Infinity;
   }
   distances[start] = 0;
 
+  // STEP 2: main loop
   while (true) {
     let closest = null;
 
+    // find nearest unvisited station
     for (let station in distances) {
       if (!visited.has(station) &&
           (closest === null || distances[station] < distances[closest])) {
@@ -82,14 +190,29 @@ function dijkstra(start, end) {
       }
     }
 
+    // stop conditions
     if (closest === null) break;
     if (closest === end) break;
 
     visited.add(closest);
 
+    // STEP 3: relax neighbors (THIS IS WHERE YOUR CODE GOES)
     for (let neighbor of metroGraph[closest]) {
-      const newDist = distances[closest] + neighbor.time;
 
+      let extraPenalty = 0;
+
+      // apply interchange penalty if line changes
+      if (
+        previous[closest] &&
+        previous[closest].line !== neighbor.line
+      ) {
+        extraPenalty = interchangePenalty;
+      }
+
+      const newDist =
+        distances[closest] + neighbor.time + extraPenalty;
+
+      // update distance if shorter path found
       if (newDist < distances[neighbor.station]) {
         distances[neighbor.station] = newDist;
         previous[neighbor.station] = {
@@ -100,19 +223,19 @@ function dijkstra(start, end) {
     }
   }
 
-  // build path
+  // STEP 4: build final path
   const path = [];
-  let current = end;
+  let curr = end;
 
-  while (current) {
-    path.unshift(current);
-    current = previous[current]?.station;
+  while (curr) {
+    path.unshift(curr);
+    curr = previous[curr]?.station;
   }
 
   return {
     path,
-    previous,
-    time: distances[end]
+    time: distances[end],
+    previous
   };
 }
 
@@ -228,6 +351,6 @@ document.getElementById("searchBtn").addEventListener("click", () => {
 
 
 
-result.innerHTML += `<div class="station interchange">🔁 ${station}</div>`;
+// result.innerHTML += `<div class="station interchange">🔁 ${station}</div>`;
 
 // document.getElementById("blueLine").style.opacity = "1";
