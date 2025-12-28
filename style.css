@@ -1,0 +1,106 @@
+body {
+  background: #3d3d4c;
+  color: rgb(241, 181, 181);
+  font-family: Source Code Pro, monospace;
+  text-align: center;
+}
+
+h1 {
+  margin-top: 20px;
+}
+
+.search-box {
+  margin: 30px auto;
+}
+
+select, button {
+  padding: 10px;
+  font-size: 16px;
+  background: #1e1e1e;
+  color: white;
+  border: 1px solid #444;
+  border-radius: 6px;
+}
+
+button {
+  background: #af4466;
+  cursor: pointer;
+}
+
+#result {
+  width: 66%;
+  margin: auto;
+  margin-top: 30px;
+  padding: 20px;
+  background: #1b1b1b;
+  border-radius: 10px;
+}
+
+#result {
+  padding: 20px;
+  background: #1b1b1b;
+  border-radius: 12px;
+  min-height: 60px;
+}
+
+
+#defaultMap {
+  max-width: 100%;
+  height: auto;
+  display: block;
+  margin: 10px auto;
+  border-radius: 8px;
+}
+
+.station {
+  margin: 8px 0;
+  font-size: 18px;
+}
+
+.map-container {
+  width: 90%;
+  margin: 30px auto;
+  background: #111;
+  padding: 10px;
+  border-radius: 12px;
+}
+
+#result,
+.map-container {
+  max-width: 800px;
+  margin: 20px auto;
+}
+
+.map-container {
+  background: #111;
+  padding: 12px;
+  border-radius: 12px;
+}
+
+#metroMap {
+  width: 100%; 
+  height: auto;
+  max-height: 420px; 
+  object-fit: contain;
+  display: block;
+  filter: brightness(0.9)
+}
+
+
+.interchange {
+  color: orange;
+  font-weight: bold;
+}
+
+.loading {
+  font-size: 20px;
+  padding: 20px;
+  animation: pulse 1s infinite;
+  color: #dcb551;
+}
+
+@keyframes pulse {
+  0% { opacity: 0.4; }
+  50% { opacity: 1; }
+  100% { opacity: 0.4; }
+}
