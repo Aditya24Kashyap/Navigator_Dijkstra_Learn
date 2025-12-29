@@ -303,7 +303,6 @@ function displayRoute(data) {
     <hr>
     ⏱ Time: ${data.time} min<br>
     🔁 Interchanges: ${interchanges}<br>
-    // 💰 Fare: ₹${calculateFare(data.time)}
     💰 Fare: ₹${calculateFareByStations(data.path.length)}
 
   `;
