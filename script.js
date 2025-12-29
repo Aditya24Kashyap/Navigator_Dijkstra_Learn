@@ -317,19 +317,25 @@ function calculateFareByStations(stationCount) {
   return 50;
 }
 
-
+// SEARCH BUTTON HANDLER
 document.getElementById("searchBtn").addEventListener("click", () => {
-  // const from = fromSelect.value;
-  // const to = toSelect.value;
-
-  const from = document.getElementById("fromStation").value.trim();
-  const to = document.getElementById("toStation").value.trim();
-
   const result = document.getElementById("result");
 
-  // Validation
+  const fromInput = document.getElementById("fromStation").value.trim();
+  const toInput = document.getElementById("toStation").value.trim();
+
+  const stations = Object.keys(metroGraph);
+
+  const from = stations.find(
+    s => s.toLowerCase() === fromInput.toLowerCase()
+  );
+  const to = stations.find(
+    s => s.toLowerCase() === toInput.toLowerCase()
+  );
+
+  // ✅ VALIDATION
   if (!from || !to) {
-    result.innerHTML = "⚠️ Please select both stations";
+    result.innerHTML = "❌ Please select stations from the dropdown";
     return;
   }
 
@@ -338,23 +344,27 @@ document.getElementById("searchBtn").addEventListener("click", () => {
     return;
   }
 
-  // 🔄 Show loading message
+  // 🔄 Loading UI
   result.innerHTML = `
     <div class="loading">
       🔍 Searching best route...
     </div>
   `;
 
-  // Fake delay (to show animation)
+  // ⏳ Delay for animation
   setTimeout(() => {
     const resultData = dijkstra(from, to);
 
-    if (!resultData.path || resultData.path.length === 0 || resultData.time === Infinity) {
+    if (
+      !resultData.path ||
+      resultData.path.length === 0 ||
+      resultData.time === Infinity
+    ) {
       result.innerHTML = "❌ No route found";
       return;
     }
 
     displayRoute(resultData);
-  }, 800); // 0.8 second delay
+  }, 800);
 });
 
